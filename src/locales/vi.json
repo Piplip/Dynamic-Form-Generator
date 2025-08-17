@@ -1,0 +1,34 @@
+{
+  "notFound": {
+    "title": "404",
+    "subtitle": "Rất tiếc! Không tìm thấy trang",
+    "description": "Trang bạn đang tìm không tồn tại hoặc có thể đã được di chuyển vĩnh viễn.",
+    "backHomeButton": "Trang chủ",
+    "promptGalleryButton": "Prompt Mẫu"
+  },
+  "mobileUnsupported": {
+    "title": "Hỗ trợ di động / máy tính bảng sắp ra mắt",
+    "description": "Trang này hiện được xem tốt nhất trên máy tính để bàn hoặc máy tính xách tay. Bạn có thể sử dụng {{linkText}} tạm thời.",
+    "description2": " trên thiết bị di động của bạn lúc này",
+    "promptGalleryLink": "Prompt Mẫu"
+  },
+  "about": {
+    "backButton": "Quay lại PromptSmith",
+    "contactTitle": "Thông tin liên hệ",
+    "contactText": "Nếu bạn có bất kỳ câu hỏi nào, hãy gửi email tại địa chỉ <email>yuanisha@gmail.com</email>",
+    "madeBy": "Made with ❤️ by yuanisha",
+    "myProjectsTitle": "Các dự án khác",
+    "donationTitle": "Ủng hộ",
+    "donationDescription": "Các dự án đều miễn phí sử dụng, nếu bạn thấy chúng hữu ích, bạn có thể ủng hộ qua:",
+    "myProjectsDescription": "Các dự án khác sẽ sớm ra mắt! Hãy sẵn sàng nhé!"
+  },
+  "requestFeature": {
+    "button": "Yêu cầu tính năng",
+    "dismiss": "Bỏ qua",
+    "title": "Yêu cầu tính năng",
+    "featureTitle": "Tiêu đề tính năng",
+    "description": "Mô tả tính năng",
+    "cancel": "Huỷ",
+    "submit": "Gửi yêu cầu"
+  }
+}

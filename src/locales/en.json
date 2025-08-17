@@ -1,0 +1,34 @@
+{
+  "notFound": {
+    "title": "404",
+    "subtitle": "Oops! Page Not Found",
+    "description": "The page you’re looking for doesn’t exist or may have been permanently moved.",
+    "backHomeButton": "Back to Home",
+    "promptGalleryButton": "Prompt Gallery"
+  },
+  "mobileUnsupported": {
+    "title": "Mobile / Tablet Support Coming Soon",
+    "description": "This page is currently best viewed on a desktop or laptop. We’re working hard to make it mobile-friendly. You may use",
+    "description2": " on your mobile device for now.",
+    "promptGalleryLink": "Prompt Gallery"
+  },
+  "about": {
+    "backButton": "Back to PromptSmith",
+    "contactTitle": "Contact Information",
+    "contactText": "If you have any questions, feedback or request a tool, feel free to reach out via email at: <email>yuanisha@gmail.com</email>",
+    "madeBy": "Made with ❤️ by yuanisha",
+    "myProjectsTitle": "My other projects",
+    "donationTitle": "Donation",
+    "donationDescription": "My projects are free to use, but if you find them helpful, you can support me by:",
+    "myProjectsDescription": "More projects coming soon! Stay tuned for updates."
+  },
+  "requestFeature": {
+    "button": "Request Feature",
+    "dismiss": "Dismiss",
+    "title": "Request a Feature",
+    "featureTitle": "Feature Title",
+    "description": "Description",
+    "cancel": "Cancel",
+    "submit": "Submit"
+  }
+}
