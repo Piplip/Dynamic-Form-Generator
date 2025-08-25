@@ -46,8 +46,7 @@ function MobileUnsupported() {
                         {t('mobileUnsupported.title')}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {t('mobileUnsupported.description')} <Link to={'/best-practices'}>{t('mobileUnsupported.promptGalleryLink')}</Link>
-                        {t('mobileUnsupported.description2')}
+                        {t('mobileUnsupported.description')}
                     </Typography>
                 </Stack>
             </Paper>

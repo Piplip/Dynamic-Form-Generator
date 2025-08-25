@@ -3,17 +3,14 @@
     "title": "404",
     "subtitle": "Oops! Page Not Found",
     "description": "The page you’re looking for doesn’t exist or may have been permanently moved.",
-    "backHomeButton": "Back to Home",
-    "promptGalleryButton": "Prompt Gallery"
+    "backHomeButton": "Back to Home"
   },
   "mobileUnsupported": {
-    "title": "Mobile / Tablet Support Coming Soon",
-    "description": "This page is currently best viewed on a desktop or laptop. We’re working hard to make it mobile-friendly. You may use",
-    "description2": " on your mobile device for now.",
-    "promptGalleryLink": "Prompt Gallery"
+    "title": "Mobile / Tablet Unsupported",
+    "description": "This page is currently only support for desktop"
   },
   "about": {
-    "backButton": "Back to PromptSmith",
+    "backButton": "Back",
     "contactTitle": "Contact Information",
     "contactText": "If you have any questions, feedback or request a tool, feel free to reach out via email at: <email>yuanisha@gmail.com</email>",
     "madeBy": "Made with ❤️ by yuanisha",

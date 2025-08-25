@@ -55,13 +55,6 @@ function NotFoundPage() {
                         >
                             {t('notFound.backHomeButton')}
                         </Button>
-                        <Button
-                            variant="outlined"
-                            sx={{ mt: 2, textTransform: "none", borderRadius: 2, px: 3, ml: 2 }}
-                            onClick={() => navigate("/best-practices")}
-                        >
-                            {t('notFound.promptGalleryButton')}
-                        </Button>
                     </Stack>
                 </Stack>
             </Paper>
