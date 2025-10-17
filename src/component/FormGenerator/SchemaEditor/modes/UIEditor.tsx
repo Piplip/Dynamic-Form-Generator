@@ -1,12 +1,11 @@
 import { rectIntersection, DndContext, DragEndEvent } from "@dnd-kit/core";
 import {arrayMove, SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
-import {FieldSchema, FormSchema} from "../../../../interfaces";
+import {FormSchema} from "../../../../interfaces";
 import {Box, Button, IconButton, MenuItem, Paper, TextField} from "@mui/material";
 import {ReactNode, useState} from "react";
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { toCamelCase } from "../../../../utils/string";
+import FieldEditor from "./UIEditor/FieldEditor";
 
 interface UIEditorProps {
     schema: FormSchema;
@@ -71,9 +70,6 @@ function UIEditor({schema, onSchemaChange, formData, onFormChange}: UIEditorProp
 
     const handleFieldChange = (index: number, field: FieldSchema) => {
         const newFields = [...schema.fields];
-        if (field.label !== newFields[index].label) {
-            field.name = toCamelCase(field.label);
-        }
         newFields[index] = field;
         onSchemaChange({ ...schema, fields: newFields });
     };
@@ -103,92 +99,13 @@ function UIEditor({schema, onSchemaChange, formData, onFormChange}: UIEditorProp
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, py: 1}}>
                             {schema.fields.map((field, index) => (
                                 <SortableItem key={index} id={index.toString()}>
-                                    <Paper sx={{p: 1, display: 'flex', flexDirection: 'row', gap: 2, flexGrow: 1}}>
-                                        <TextField
-                                            label="Name"
-                                            value={field.name}
-                                            onChange={(e) => handleFieldChange(index, {...field, name: e.target.value})}
-                                        />
-                                        <TextField
-                                            label="Label"
-                                            value={field.label}
-                                            onChange={(e) => handleFieldChange(index, {
-                                                ...field,
-                                                label: e.target.value
-                                            })}
-                                        />
-                                        <TextField
-                                            sx={{minWidth: 'fit-content'}}
-                                            select
-                                            label="Type"
-                                            value={field.type}
-                                            onChange={(e) => handleFieldChange(index, {...field, type: e.target.value})}
-                                        >
-                                            <MenuItem value="text">Text</MenuItem>
-                                            <MenuItem value="number">Number</MenuItem>
-                                            <MenuItem value="email">Email
-                                            </MenuItem>
-                                            <MenuItem value="select">Select</MenuItem>
-                                            <MenuItem value="checkbox">Checkbox</MenuItem>
-                                        </TextField>
-                                        {field.type === 'select' && (
-                                            <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-                                                {field?.options && field.options.map((option, optionIndex) => (
-                                                    <Box key={optionIndex}
-                                                         sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
-                                                        <TextField
-                                                            label="Option Label"
-                                                            value={option.label}
-                                                            onChange={(e) => {
-                                                                const newOptions = [...field.options];
-                                                                newOptions[optionIndex].label = e.target.value;
-                                                                handleFieldChange(index, {
-                                                                    ...field,
-                                                                    options: newOptions
-                                                                });
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            label="Option Value"
-                                                            value={option.value}
-                                                            onChange={(e) => {
-                                                                const newOptions = [...field.options];
-                                                                newOptions[optionIndex].value = e.target.value;
-                                                                handleFieldChange(index, {
-                                                                    ...field,
-                                                                    options: newOptions
-                                                                });
-                                                            }}
-                                                        />
-                                                        <Button
-                                                            onClick={() => {
-                                                                const newOptions = [...field.options];
-                                                                newOptions.splice(optionIndex, 1);
-                                                                handleFieldChange(index, {
-                                                                    ...field,
-                                                                    options: newOptions
-                                                                });
-                                                            }}
-                                                        >
-                                                            Remove
-                                                        </Button>
-                                                    </Box>
-                                                ))}
-                                                <Button
-                                                    onClick={() => {
-                                                        const newOptions = [...(field.options || [])];
-                                                        newOptions.push({label: '', value: ''});
-                                                        handleFieldChange(index, {...field, options: newOptions});
-                                                    }}
-                                                >
-                                                    Add Option
-                                                </Button>
-                                            </Box>
-                                        )}
-                                        <Button onClick={() => handleRemoveField(index)}>
-                                            <DeleteIcon/>
-                                        </Button>
-                                    </Paper>
+                                    <FieldEditor
+                                        field={field}
+                                        index={index}
+                                        onFieldChange={handleFieldChange}
+                                        onRemoveField={handleRemoveField}
+                                        availableFields={schema.fields}
+                                    />
                                 </SortableItem>
                             ))}
                             <Paper sx={{p: 2, display: 'flex', flexDirection: 'row', gap: 2, mt: 2}}>
@@ -204,6 +121,7 @@ function UIEditor({schema, onSchemaChange, formData, onFormChange}: UIEditorProp
                                     <MenuItem value="email">Email</MenuItem>
                                     <MenuItem value="select">Select</MenuItem>
                                     <MenuItem value="checkbox">Checkbox</MenuItem>
+                                    <MenuItem value="date">Date</MenuItem>
                                 </TextField>
                                 <Button onClick={handleAddField}>Add Field</Button>
                             </Paper>

@@ -1,19 +1,23 @@
 import { useState } from "react";
-import {FieldSchema} from "../../../interfaces";
+import {FormSchema} from "../../../interfaces";
 import ExportDialog from "./ExportDialog.tsx";
+import {generateReactCode} from "../../../utils/codeGenerator";
+import ExportCodeDialog from "./ExportCodeDialog.tsx";
 
 interface OutputPanelProps {
     data: Record<string, any>;
     errors: Record<string, string>;
-    schema: FieldSchema[];
+    schema: FormSchema;
 }
 
 function OutputPanel({data, errors, schema}: OutputPanelProps) {
-    const [open, setOpen] = useState(false);
+    const [openHtmlJs, setOpenHtmlJs] = useState(false);
+    const [openReact, setOpenReact] = useState(false);
     const [htmlCode, setHtmlCode] = useState('');
     const [jsCode, setJsCode] = useState('');
+    const [reactCode, setReactCode] = useState('');
 
-    const handleExport = () => {
+    const handleExportHtmlJs = () => {
         const generatedHtmlCode = `
 <html>
 <head>
@@ -22,7 +26,7 @@ function OutputPanel({data, errors, schema}: OutputPanelProps) {
 </head>
 <body>
     <form id="generated-form">
-        ${schema.map(field => {
+        ${schema.fields.map(field => {
             switch (field.type) {
                 case 'text':
                 case 'email':
@@ -32,6 +36,8 @@ function OutputPanel({data, errors, schema}: OutputPanelProps) {
                     return `<label for="${field.name}">${field.label}</label><br>\n<select id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>\n${field.options?.map(option => `<option value="${option.value}">${option.label}</option>`).join('\n')}\n</select><br><br>\n`;
                 case 'checkbox':
                     return `<input type="checkbox" id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>\n<label for="${field.name}">${field.label}</label><br><br>\n`;
+                case 'date':
+                    return `<label for="${field.name}">${field.label}</label><br>\n<input type="date" id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}><br><br>\n`;
                 default:
                     return '';
             }
@@ -67,12 +73,19 @@ form.addEventListener('submit', (e) => {
 
         setHtmlCode(generatedHtmlCode);
         setJsCode(generatedJsCode);
-        setOpen(true);
+        setOpenHtmlJs(true);
+    };
+
+    const handleExportReact = () => {
+        const generatedReactCode = generateReactCode(schema);
+        setReactCode(generatedReactCode);
+        setOpenReact(true);
     };
 
     return (
         <div>
-            <button onClick={handleExport}>Export</button>
+            <button onClick={handleExportHtmlJs}>Export HTML/JS</button>
+            <button onClick={handleExportReact}>Export React</button>
             <h2>Form Data</h2>
             <pre>{JSON.stringify(data, null, 2)}</pre>
             {Object.keys(errors).length > 0 && (
@@ -87,7 +100,8 @@ form.addEventListener('submit', (e) => {
                     </ul>
                 </div>
             )}
-            <ExportDialog open={open} onClose={() => setOpen(false)} htmlCode={htmlCode} jsCode={jsCode} />
+            <ExportDialog open={openHtmlJs} onClose={() => setOpenHtmlJs(false)} htmlCode={htmlCode} jsCode={jsCode} />
+            <ExportCodeDialog open={openReact} onClose={() => setOpenReact(false)} code={reactCode} />
         </div>
     );
 }

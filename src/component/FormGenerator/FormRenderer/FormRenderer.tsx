@@ -1,35 +1,70 @@
-import InputField from "../FieldRenderer/InputField";
-import SelectField from "../FieldRenderer/SelectField";
-import CheckboxField from "../FieldRenderer/CheckboxField";
-import {Typography} from "@mui/material";
-import {FieldSchema} from "../../../interfaces";
+import {Grid, Typography} from "@mui/material";
+import {FormSchema, FieldSchema} from "../../../interfaces";
+import {validateFormData} from "../../../utils/validation";
+import GenericFieldRenderer from "../FieldRenderer";
 
 interface FormRendererProps {
-    schema: FieldSchema[];
+    schema: FormSchema;
     formData: Record<string, any>;
     onFormChange: (data: Record<string, any>) => void;
     onValidate: (errors: Record<string, string>) => void;
+    formErrors: Record<string, string>;
 }
 
-function FormRenderer({schema, formData, onFormChange, onValidate}: FormRendererProps) {
+function FormRenderer({schema, formData, onFormChange, onValidate, formErrors}: FormRendererProps) {
+
+    const checkCondition = (field: FieldSchema): boolean => {
+        if (!field.condition) {
+            return true;
+        }
+
+        const {field: conditionField, operator, value: conditionValue} = field.condition;
+        const fieldValue = formData[conditionField];
+
+        switch (operator) {
+            case '==':
+                return fieldValue == conditionValue;
+            case '!=':
+                return fieldValue != conditionValue;
+            case '>':
+                return fieldValue > conditionValue;
+            case '<':
+                return fieldValue < conditionValue;
+            case '>=':
+                return fieldValue >= conditionValue;
+            case '<=':
+                return fieldValue <= conditionValue;
+            case 'includes':
+                return String(fieldValue).includes(String(conditionValue));
+            case '!includes':
+                return !String(fieldValue).includes(String(conditionValue));
+            default:
+                return true;
+        }
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
 
         e.preventDefault();
 
-        // TODO: Add validation
+        const errors = validateFormData(schema.fields, formData);
+        onValidate(errors);
+
+        if (Object.keys(errors).length === 0) {
+            console.log('Form submitted successfully:', formData);
+        }
 
     };
 
 
-    if (!Array.isArray(schema)) {
+    if (!schema || !Array.isArray(schema.fields)) {
 
         return <Typography color="error">Invalid schema: schema is not an array</Typography>;
 
     }
 
 
-    if (schema.length === 0) {
+    if (schema.fields.length === 0) {
 
         return <Typography>The form is empty. Please provide a schema.</Typography>;
 
@@ -38,52 +73,34 @@ function FormRenderer({schema, formData, onFormChange, onValidate}: FormRenderer
 
     return (
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={schema.style}>
 
-            {schema.map((field) => {
+            <Grid container {...schema.layout}>
+                {schema.fields.map((field) => {
 
-                const handleChange = (value: any) => {
+                    const handleChange = (value: any) => {
 
-                    onFormChange({...formData, [field.name]: value});
+                        onFormChange({...formData, [field.name]: value});
 
-                };
+                    };
 
-
-                switch (field.type) {
-
-                    case "text":
-
-                    case "email":
-
-                    case "number":
-
-                        return <InputField key={field.name} field={field} value={formData[field.name]}
-                                           onChange={handleChange}/>;
-
-                    case "select":
-
-                        if (!field.options || !Array.isArray(field.options) || !field.options.every(option => typeof option === 'object' && option.hasOwnProperty('label') && option.hasOwnProperty('value'))) {
-
-                            return <Typography color="error">Invalid options for select
-                                field: {field.name}</Typography>;
-
-                        }
-
-                        return <SelectField key={field.name} field={field} value={formData[field.name]}
-                                            onChange={handleChange}/>;
-
-                    case "checkbox":
-
-                        return <CheckboxField key={field.name} field={field} value={formData[field.name]}
-                                              onChange={handleChange}/>;
-
-                    default:
-
+                    if (!checkCondition(field)) {
                         return null;
+                    }
 
-                }
+                    return (
+                        <Grid item xs={field.grid?.xs} sm={field.grid?.sm} md={field.grid?.md} lg={field.grid?.lg} xl={field.grid?.xl} key={field.name}>
+                            <GenericFieldRenderer
+                                field={field}
+                                value={formData[field.name]}
+                                onChange={handleChange}
+                                error={formErrors[field.name]}
+                            />
+                        </Grid>
+                    )
 
-            })}
+                })}
+            </Grid>
 
             <button type="submit">Submit</button>
 

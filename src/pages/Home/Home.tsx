@@ -57,10 +57,11 @@ function Home() {
                         <Typography color="error">{schemaError}</Typography>
                     ) : (
                         <FormRenderer
-                            schema={schema.fields}
+                            schema={schema}
                             formData={formData}
                             onFormChange={setFormData}
                             onValidate={setFormErrors}
+                            formErrors={formErrors}
                         />
                     )}
                 </Paper>
@@ -69,7 +70,7 @@ function Home() {
                         <Typography variant="h5" gutterBottom>
                             JSON Output
                         </Typography>
-                        <OutputPanel data={formData} errors={formErrors} schema={schema.fields}/>
+                        <OutputPanel data={formData} errors={formErrors} schema={schema}/>
                     </Paper>
                 </Stack>
             </Stack>

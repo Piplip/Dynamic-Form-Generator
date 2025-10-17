@@ -41,7 +41,7 @@ function SchemaEditor({schemaText, onSchemaTextChange, formData, onFormChange}: 
                               onFormChange={onFormChange}/>
                 )}
                 {tabValue === 2 && (
-                    <AIEditor/>
+                    <AIEditor onGenerateSchema={handleSchemaChange}/>
                 )}
             </div>
         </div>
