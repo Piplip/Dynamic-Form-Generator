@@ -1,13 +1,25 @@
-import {Box, Button, Checkbox, FormControlLabel, MenuItem, TextField, IconButton} from "@mui/material";
+import {
+    Box,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    MenuItem,
+    TextField,
+    IconButton,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Typography,
+    Switch
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useState} from "react";
 import ConditionEditor from "./ConditionEditor";
-import {FieldSchema} from "../../../../../interfaces";
+import {FieldSchema, FormSchema} from "../../../../../interfaces";
 import {toCamelCase} from "../../../../../utils/string.ts";
-import GridOnIcon from '@mui/icons-material/GridOn';
 import ListIcon from '@mui/icons-material/List';
-import LayoutEditorModal from "./LayoutEditorModal";
 import OptionsEditorModal from "./OptionsEditorModal";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 interface FieldEditorProps {
     field: FieldSchema;
@@ -15,19 +27,15 @@ interface FieldEditorProps {
     onFieldChange: (index: number, field: FieldSchema) => void;
     onRemoveField: (index: number) => void;
     availableFields: FieldSchema[];
+    schema: FormSchema;
+    onSchemaChange: (schema: FormSchema) => void;
 }
 
-function FieldEditor({field, index, onFieldChange, onRemoveField, availableFields}: FieldEditorProps) {
-    const [showConditionEditor, setShowConditionEditor] = useState(false);
-    const [showLayoutEditor, setShowLayoutEditor] = useState(false);
+function FieldEditor({field, index, onFieldChange, onRemoveField, availableFields, schema, onSchemaChange}: FieldEditorProps) {
     const [showOptionsEditor, setShowOptionsEditor] = useState(false);
 
     const handleConditionChange = (condition?: FieldSchema['condition']) => {
         onFieldChange(index, {...field, condition});
-    };
-
-    const handleGridChange = (grid?: FieldSchema['grid']) => {
-        onFieldChange(index, {...field, grid});
     };
 
     const handleOptionsChange = (options?: FieldSchema['options']) => {
@@ -37,11 +45,6 @@ function FieldEditor({field, index, onFieldChange, onRemoveField, availableField
     return (
         <Box sx={{p: 1, display: 'flex', flexDirection: 'column', gap: 2, flexGrow: 1}}>
             <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, flexGrow: 1, alignItems: 'center'}}>
-                <TextField
-                    label="Name"
-                    value={field.name}
-                    onChange={(e) => onFieldChange(index, {...field, name: e.target.value})}
-                />
                 <TextField
                     label="Label"
                     value={field.label}
@@ -58,7 +61,7 @@ function FieldEditor({field, index, onFieldChange, onRemoveField, availableField
                     select
                     label="Type"
                     value={field.type}
-                    onChange={(e) => onFieldChange(index, {...field, type: e.target.value})}
+                    onChange={(e) => onFieldChange(index, {...field, type: e.target.value as FieldSchema['type']})}
                 >
                     <MenuItem value="text">Text</MenuItem>
                     <MenuItem value="number">Number</MenuItem>
@@ -66,15 +69,21 @@ function FieldEditor({field, index, onFieldChange, onRemoveField, availableField
                     <MenuItem value="select">Select</MenuItem>
                     <MenuItem value="checkbox">Checkbox</MenuItem>
                     <MenuItem value="date">Date</MenuItem>
+                    <MenuItem value="file">File</MenuItem>
+                    <MenuItem value="rich-text">Rich Text</MenuItem>
+                    <MenuItem value="button">Button</MenuItem>
+                    <MenuItem value="textarea">Textarea</MenuItem>
                 </TextField>
-                <FormControlLabel
-                    control={<Checkbox checked={field.required}
-                                       onChange={(e) => onFieldChange(index, {...field, required: e.target.checked})}/>}
-                    label="Required"
-                />
-                <IconButton onClick={() => setShowLayoutEditor(true)}>
-                    <GridOnIcon/>
-                </IconButton>
+                {field.type !== 'button' &&
+                    <FormControlLabel
+                        control={<Checkbox checked={field.validation?.required}
+                                           onChange={(e) => onFieldChange(index, {
+                                               ...field,
+                                               validation: {...field.validation, required: e.target.checked}
+                                           })}/>}
+                        label="Required"
+                    />
+                }
                 {field.type === 'select' && (
                     <IconButton onClick={() => setShowOptionsEditor(true)}>
                         <ListIcon/>
@@ -84,52 +93,219 @@ function FieldEditor({field, index, onFieldChange, onRemoveField, availableField
                     <DeleteIcon/>
                 </Button>
             </Box>
-            <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, flexGrow: 1}}>
-                <TextField
-                    label="Default Value"
-                    value={field.defaultValue}
-                    onChange={(e) => onFieldChange(index, {...field, defaultValue: e.target.value})}
-                />
-                <TextField
-                    label="Placeholder"
-                    value={field.placeholder}
-                    onChange={(e) => onFieldChange(index, {...field, placeholder: e.target.value})}
-                />
-                <TextField
-                    label="Min Length"
-                    type="number"
-                    value={field.validation?.minLength}
-                    onChange={(e) => onFieldChange(index, { ...field, validation: { ...field.validation, minLength: parseInt(e.target.value) } })}
-                />
-                <TextField
-                    label="Max Length"
-                    type="number"
-                    value={field.validation?.maxLength}
-                    onChange={(e) => onFieldChange(index, { ...field, validation: { ...field.validation, maxLength: parseInt(e.target.value) } })}
-                />
-                <TextField
-                    label="Pattern"
-                    value={field.validation?.pattern}
-                    onChange={(e) => onFieldChange(index, { ...field, validation: { ...field.validation, pattern: e.target.value } })}
-                />
-            </Box>
-            <Button onClick={() => setShowConditionEditor(!showConditionEditor)}>
-                {field.condition ? "Edit Condition" : "Add Condition"}
-            </Button>
-            {showConditionEditor && (
-                <ConditionEditor
-                    condition={field.condition}
-                    onConditionChange={handleConditionChange}
-                    availableFields={availableFields}
-                    onClose={() => setShowConditionEditor(false)}
-                />
+            {field.type === 'button' && (
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                        <Typography>Button</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                            <TextField
+                                select
+                                label="Button Type"
+                                value={field.buttonType || 'submit'}
+                                onChange={(e) => onFieldChange(index, {
+                                    ...field,
+                                    buttonType: e.target.value as FieldSchema['buttonType']
+                                })}
+                            >
+                                <MenuItem value="submit">Submit</MenuItem>
+                                <MenuItem value="button">Button</MenuItem>
+                            </TextField>
+                            <FormControlLabel
+                                control={<Switch checked={field.loading}
+                                                 onChange={(e) => onFieldChange(index, {
+                                                     ...field,
+                                                     loading: e.target.checked
+                                                 })}/>}
+                                label="Loading"
+                            />
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
             )}
-            <LayoutEditorModal
-                open={showLayoutEditor}
-                onClose={() => setShowLayoutEditor(false)}
-                grid={field.grid}
-                onGridChange={handleGridChange}
-            />
+            {field.type === 'file' && (
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                        <Typography>File Upload</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                            <TextField
+                                select
+                                label="Preset"
+                                value={field.layout?.preset || 'button'}
+                                onChange={(e) => handleLayoutChange({
+                                    ...field.layout,
+                                    preset: e.target.value as FieldSchema['layout']['preset']
+                                })}
+                            >
+                                <MenuItem value="button">Button</MenuItem>
+                                <MenuItem value="dropzone">Dropzone</MenuItem>
+                            </TextField>
+                            <TextField
+                                label="Button Text"
+                                value={field.layout?.buttonText}
+                                onChange={(e) => handleLayoutChange({
+                                    ...field.layout,
+                                    buttonText: e.target.value
+                                })}
+                            />
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
+            )}
+            {field.type === 'checkbox' && (
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                        <Typography>Checkbox</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                            <TextField
+                                label="Checked Icon"
+                                value={field.style?.checkedIcon}
+                                onChange={(e) => handleStyleChange({
+                                    ...field.style,
+                                    checkedIcon: e.target.value
+                                })}
+                            />
+                            <TextField
+                                label="Unchecked Icon"
+                                value={field.style?.uncheckedIcon}
+                                onChange={(e) => handleStyleChange({
+                                    ...field.style,
+                                    uncheckedIcon: e.target.value
+                                })}
+                            />
+                            <TextField
+                                label="Indeterminate Icon"
+                                value={field.style?.indeterminateIcon}
+                                onChange={(e) => handleStyleChange({
+                                    ...field.style,
+                                    indeterminateIcon: e.target.value
+                                })}
+                            />
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
+            )}
+            {field.type !== 'button' &&
+                <>
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                            <Typography>Advanced</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                                <TextField
+                                    label="Name"
+                                    value={field.name}
+                                    onChange={(e) => onFieldChange(index, {...field, name: e.target.value})}
+                                />
+                                <TextField
+                                    label="Default Value"
+                                    value={field.defaultValue}
+                                    onChange={(e) => onFieldChange(index, {
+                                        ...field,
+                                        defaultValue: e.target.value
+                                    })}
+                                />
+                                <TextField
+                                    label="Placeholder"
+                                    value={field.placeholder}
+                                    onChange={(e) => onFieldChange(index, {
+                                        ...field,
+                                        placeholder: e.target.value
+                                    })}
+                                />
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                            <Typography>Validation</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                                {field.type === 'number' && (
+                                    <>
+                                        <TextField
+                                            label="Min"
+                                            type="number"
+                                            value={field.validation?.min}
+                                            onChange={(e) => onFieldChange(index, {
+                                                ...field,
+                                                validation: {
+                                                    ...field.validation,
+                                                    min: parseInt(e.target.value)
+                                                }
+                                            })}
+                                        />
+                                        <TextField
+                                            label="Max"
+                                            type="number"
+                                            value={field.validation?.max}
+                                            onChange={(e) => onFieldChange(index, {
+                                                ...field,
+                                                validation: {
+                                                    ...field.validation,
+                                                    max: parseInt(e.target.value)
+                                                }
+                                            })}
+                                        />
+                                    </>
+                                )}
+                                <TextField
+                                    label="Min Length"
+                                    type="number"
+                                    value={field.validation?.minLength}
+                                    onChange={(e) => onFieldChange(index, {
+                                        ...field,
+                                        validation: {
+                                            ...field.validation,
+                                            minLength: parseInt(e.target.value)
+                                        }
+                                    })}
+                                />
+                                <TextField
+                                    label="Max Length"
+                                    type="number"
+                                    value={field.validation?.maxLength}
+                                    onChange={(e) => onFieldChange(index, {
+                                        ...field,
+                                        validation: {
+                                            ...field.validation,
+                                            maxLength: parseInt(e.target.value)
+                                        }
+                                    })}
+                                />
+                                <TextField
+                                    label="Pattern"
+                                    value={field.validation?.pattern}
+                                    onChange={(e) => onFieldChange(index, {
+                                        ...field,
+                                        validation: {...field.validation, pattern: e.target.value}
+                                    })}
+                                />
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                </>
+            }
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                    <Typography>Conditional Logic</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <ConditionEditor
+                        condition={field.condition}
+                        onConditionChange={handleConditionChange}
+                        availableFields={availableFields}
+                        onClose={() => {}}
+                    />
+                </AccordionDetails>
+            </Accordion>
             {field.type === 'select' && (
                 <OptionsEditorModal
                     open={showOptionsEditor}

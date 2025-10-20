@@ -1,6 +1,7 @@
-import {Button, Checkbox, FormControlLabel, FormGroup, TextField} from "@mui/material";
+import {Button, Checkbox, FormControlLabel, FormGroup, TextField, CircularProgress, Typography} from "@mui/material";
 import {useState} from "react";
 import {FormSchema} from "../../../../interfaces";
+import {generateSchemaFromText} from "../../../../utils/ai";
 
 interface AIEditorProps {
     onGenerateSchema: (schema: FormSchema) => void;
@@ -11,46 +12,21 @@ function AIEditor({onGenerateSchema}: AIEditorProps) {
     const [requiredFields, setRequiredFields] = useState(false);
     const [defaultValues, setDefaultValues] = useState(false);
     const [validationRules, setValidationRules] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleGenerate = async () => {
-        // Simulate API call to LLM
-        const mockGeneratedSchema: FormSchema = {
-            fields: [
-                {
-                    name: "name",
-                    label: "Name",
-                    type: "text",
-                    required: requiredFields,
-                    placeholder: "Enter your name",
-                    validation: validationRules ? { minLength: 3 } : undefined,
-                    defaultValue: defaultValues ? "John Doe" : undefined,
-                },
-                {
-                    name: "email",
-                    label: "Email",
-                    type: "email",
-                    required: requiredFields,
-                    placeholder: "Enter your email",
-                    validation: validationRules ? { pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" } : undefined,
-                    defaultValue: defaultValues ? "john.doe@example.com" : undefined,
-                },
-                {
-                    name: "message",
-                    label: "Message",
-                    type: "text",
-                    required: requiredFields,
-                    placeholder: "Enter your message",
-                    validation: validationRules ? { maxLength: 500 } : undefined,
-                },
-                {
-                    name: "subscribe",
-                    label: "Subscribe to newsletter",
-                    type: "checkbox",
-                    defaultValue: defaultValues ? true : false,
-                },
-            ],
-        };
-        onGenerateSchema(mockGeneratedSchema);
+        setLoading(true);
+        setError(null);
+        try {
+            const generatedSchema = await generateSchemaFromText(text);
+            onGenerateSchema(generatedSchema);
+        } catch (error) {
+            setError("Failed to generate schema. Please try again.");
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -68,7 +44,10 @@ function AIEditor({onGenerateSchema}: AIEditorProps) {
                 <FormControlLabel control={<Checkbox checked={defaultValues} onChange={(e) => setDefaultValues(e.target.checked)}/>} label="Default values"/>
                 <FormControlLabel control={<Checkbox checked={validationRules} onChange={(e) => setValidationRules(e.target.checked)}/>} label="Validation rules"/>
             </FormGroup>
-            <Button onClick={handleGenerate}>Generate</Button>
+            <Button onClick={handleGenerate} disabled={loading}>
+                {loading ? <CircularProgress size={24} /> : "Generate"}
+            </Button>
+            {error && <Typography color="error">{error}</Typography>}
         </div>
     );
 }

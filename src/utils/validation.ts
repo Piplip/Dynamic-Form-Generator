@@ -15,13 +15,7 @@ export const createZodSchema = (fields: FieldSchema[]) => {
         if (field.validation?.minLength) {
           fieldValidator = fieldValidator.min(field.validation.minLength, `Minimum length is ${field.validation.minLength}`);
         }
-        if (field.validation?.maxLength) {
-          fieldValidator = fieldValidator.max(field.validation.maxLength, `Maximum length is ${field.validation.maxLength}`);
-        }
-        if (field.validation?.pattern) {
-          fieldValidator = fieldValidator.regex(new RegExp(field.validation.pattern), `Invalid format`);
-        }
-        if (field.required) {
+        if (field.validation?.required) {
           fieldValidator = fieldValidator.nonempty(`${field.label || field.name} is required`);
         }
         break;
@@ -33,7 +27,7 @@ export const createZodSchema = (fields: FieldSchema[]) => {
         break;
       case 'checkbox':
         fieldValidator = z.boolean();
-        if (field.required) {
+        if (field.validation?.required) {
           fieldValidator = fieldValidator.refine(val => val === true, `${field.label || field.name} must be checked`);
         }
         break;

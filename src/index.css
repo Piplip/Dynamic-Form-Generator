@@ -23,3 +23,24 @@ a{
   text-decoration: none;
   color: inherit;
 }
+
+.react-resizable {
+  position: relative;
+}
+
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  padding: 0 3px 3px 0;
+}
+
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><path d="M 0 10 L 10 0 L 10 2 L 2 10z M 4 10 L 10 4 L 10 6 L 6 10z M 8 10 L 10 8 L 10 10z" fill="black"/></svg>');
+}
