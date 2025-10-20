@@ -1,28 +1,50 @@
-import {FieldSchema} from "../../../interfaces";
+import {FieldSchema, FormTheme} from "../../../interfaces";
 import {CSSProperties} from "react";
 
 interface FieldRendererProps {
-  field: FieldSchema;
-  value: any;
-  onChange: (value: any) => void;
-  error?: string;
+    field: FieldSchema;
+    value: any;
+    onChange: (value: any) => void;
+    error?: string;
     style?: CSSProperties;
+    labelPlacement?: 'top' | 'left' | 'inline';
+    theme?: FormTheme;
 }
 
-function InputField({field, value, onChange, error, style}: FieldRendererProps) {
-  return (
-      <div style={style}>
-      <label>{field.label || field.name}</label>
-      <input
-        type={field.type}
-        name={field.name}
-        value={value ?? field.defaultValue ?? ''}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={field.placeholder}
-      />
-      {error && <span>{error}</span>}
-    </div>
-  );
+function InputField({field, value, onChange, error, style, labelPlacement, theme}: FieldRendererProps) {
+    const label = field.label || field.name;
+    const isInline = labelPlacement === 'inline';
+
+    const inputStyle: CSSProperties = {
+        ...style,
+        backgroundColor: theme?.color?.background,
+        color: theme?.color?.text,
+        fontSize: theme?.font?.size,
+        fontFamily: theme?.font?.family,
+        fontWeight: theme?.font?.weight,
+        fontStyle: theme?.font?.style,
+        lineHeight: theme?.layout?.lineHeight,
+        padding: theme?.layout?.padding,
+        margin: theme?.layout?.margin,
+        borderColor: theme?.border?.color,
+        borderWidth: theme?.border?.width,
+        borderStyle: theme?.border?.style,
+    };
+
+    return (
+        <div>
+            <label>{label}</label>
+            <input
+                type={field.type}
+                name={field.name}
+                value={value ?? field.defaultValue ?? ''}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={field.placeholder}
+                style={inputStyle}
+            />
+            {error && <span>{error}</span>}
+        </div>
+    );
 }
 
 export default InputField;

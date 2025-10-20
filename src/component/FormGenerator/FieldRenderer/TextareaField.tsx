@@ -1,4 +1,4 @@
-import {FieldSchema} from "../../../interfaces";
+import {FieldSchema, FormTheme} from "../../../interfaces";
 import {CSSProperties} from "react";
 import {TextField} from "@mui/material";
 
@@ -10,26 +10,32 @@ interface FieldRendererProps {
     style?: CSSProperties;
     variant?: 'outlined' | 'filled' | 'standard';
     labelPlacement?: 'top' | 'left' | 'inline';
+    theme?: FormTheme;
 }
 
-function DateField({field, value, onChange, error, style, variant, labelPlacement}: FieldRendererProps) {
+function TextareaField({field, value, onChange, error, style, variant, labelPlacement, theme}: FieldRendererProps) {
     const label = field.label || field.name;
     const isInline = labelPlacement === 'inline';
 
+    const textareaStyle: CSSProperties = {
+        ...style,
+        backgroundColor: theme?.color?.background,
+        color: theme?.color?.text,
+    };
+
     return (
         <TextField
-            style={style}
-            type="date"
+            style={textareaStyle}
+            multiline
+            rows={4}
             name={field.name}
             label={isInline ? '' : label}
             value={value ?? field.defaultValue ?? ''}
             onChange={(e) => onChange(e.target.value)}
+            placeholder={field.placeholder}
             error={!!error}
             helperText={error}
             variant={variant}
-            InputLabelProps={{
-                shrink: true,
-            }}
             InputProps={{
                 startAdornment: isInline ? <span style={{paddingRight: '10px'}}>{label}</span> : null,
             }}
@@ -37,4 +43,4 @@ function DateField({field, value, onChange, error, style, variant, labelPlacemen
     );
 }
 
-export default DateField;
+export default TextareaField;

@@ -16,25 +16,38 @@ The application is built using the following technologies:
 *   **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
 *   **Material-UI:** A React UI framework that implements Google's Material Design.
 *   **Vite:** A build tool that provides a fast development experience for modern web projects.
+*   **Zod:** A TypeScript-first schema declaration and validation library.
+*   **@google/generative-ai:** The Google Generative AI SDK for TypeScript.
+*   **jodit-react:** A React wrapper for the Jodit editor.
+*   **Vitest:** A blazing fast unit-test framework powered by Vite.
+*   **react-resizable-panels:** A library for creating resizable panels in React.
+*   **konva & react-konva:** Libraries for 2D canvas rendering in React.
 
 ## 3. Key Files and Directories
 
 *   `src/interfaces/index.ts`: This file contains the TypeScript interfaces for the form schema.
-*   `src/pages/Home/Home.tsx`: This is the main component of the application. It contains the `SchemaEditor`, `FormRenderer`, and `OutputPanel` components.
+*   `src/pages/Home/Home.tsx`: This is the main component of the application. It contains the `SchemaEditor`, `FormRenderer`, and `OutputPanel` components, and it uses `react-resizable-panels` to create a flexible layout.
 *   `src/component/FormGenerator/SchemaEditor/SchemaEditor.tsx`: This component allows users to create and edit the JSON schema for the form. It has three modes:
     *   **Manual:** A simple text area for manual JSON editing.
     *   **UI:** A graphical interface for building the schema.
     *   **AI:** A component that uses a large language model (LLM) to generate the JSON schema from natural language input.
+*   `src/component/FormGenerator/SchemaEditor/modes/UIEditor/FieldEditor.tsx`: This component provides a more compact and organized UI for editing the fields in the UI mode. It uses `Accordion` components to show and hide the advanced, validation, and conditional logic sections.
+*   `src/component/FormGenerator/SchemaEditor/modes/UIEditor/LayoutEditorModal.tsx`: This component provides a Canvas-based layout editor for precise visual representation and interactive field manipulation.
 *   `src/component/FormGenerator/FormRenderer/FormRenderer.tsx`: This component renders the form based on the JSON schema.
-*   `src/component/FormGenerator/OutputPanel/OutputPanel.tsx`: This component displays the form data and any validation errors. It also has an "Export" button that allows users to download the generated form as an HTML file.
+*   `src/component/FormGenerator/OutputPanel/OutputPanel.tsx`: This component displays the form data and any validation errors. It also has an "Export" button that allows users to download the generated form as an HTML file, or as code for different web frameworks.
+*   `src/utils/ai.ts`: This file contains the logic for interacting with the Gemini API to generate the JSON schema from natural language.
+*   `src/utils/codeGenerator.ts`: This file contains the logic for generating code for different web frameworks.
+*   `src/utils/validation.ts`: This file contains the logic for validating the form data using Zod.
 
 ## 4. Local Setup
 
 To set up the project locally, follow these steps:
 
 1.  Clone the repository.
-2.  Install the dependencies using `npm install`.
-3.  Start the development server using `npm run dev`.
+2.  Create a `.env` file in the root of the project and add your Gemini API key as `VITE_GEMINI_API_KEY`.
+3.  Install the dependencies using `npm install`.
+4.  Start the development server using `npm run dev`.
+5.  Run the tests using `npm test`.
 
 ## 5. Conventions
 

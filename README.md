@@ -6,17 +6,21 @@ Ever wanted to create a form but didn't want to mess with complicated code? The 
 
 ## Key Features
 
-*   **Build Forms with Simple Text:** Just type out what you want in your form, and our AI will automatically create it for you. For example, you can type "a form with a name field, an email field, and a message box," and the form will be generated instantly.
-*   **Drag-and-Drop Interface:** Don't want to type? No problem! You can use our intuitive drag-and-drop editor to build your form visually. Simply drag the fields you want (like text boxes, dropdowns, and checkboxes) onto the form.
+*   **AI-Powered Form Generation:** Describe your desired form in natural language, and our AI will instantly generate a JSON schema for you.
+*   **Intuitive UI Editor:** Visually design your forms with a powerful UI editor. Add, remove, and configure fields with ease.
+*   **Advanced Layout Editor (WYSIWYG):** Precisely control the layout of your form fields with a new Canvas-based editor. Drag and drop fields, resize them, and arrange them in a grid-based system with real-time visual feedback.
+*   **Comprehensive Styling Options:** Customize the look and feel of your forms with extensive theme properties, including fonts, colors, spacing, and borders.
 *   **Instant Previews:** See your form come to life as you build it. The live preview panel shows you exactly what your form will look like.
-*   **Easy Data Export:** Once you've collected responses, you can easily export the data to a JSON file or even export the entire form as an HTML file to use on your website.
+*   **Custom Field Types:** Beyond standard text and numbers, create forms with rich text editors, file uploads, and custom buttons.
+*   **Conditional Logic:** Implement dynamic forms where fields appear or disappear based on user input.
+*   **Easy Data Export & Code Generation:** Easily export collected data to JSON or generate production-ready code for various web frameworks (e.g., React).
 
 ## How to Use
 
-1.  **Describe Your Form:** Start by typing a description of the form you want to create in the **AI Editor** tab. For example, "a customer feedback form with a rating scale from 1 to 5."
-2.  **Fine-Tune with the UI Editor:** If you want to make changes, switch to the **UI Editor** tab. Here, you can add, remove, or rearrange fields with a simple drag-and-drop interface.
-3.  **Preview Your Form:** The **Form Preview** panel on the right will update in real-time, showing you exactly what your form looks like.
-4.  **Share or Export:** Once you're happy with your form, you can start collecting responses. The data you collect will appear in the **JSON Output** panel. You can also click the **Export** button to download your form as an HTML file.
+1.  **Describe Your Form (AI Editor):** Start by typing a description of the form you want to create in the **AI Editor** tab. For example, "a customer feedback form with a rating scale from 1 to 5."
+2.  **Visually Design (UI Editor):** Switch to the **UI Editor** tab to add, remove, or configure fields. Use the **Edit Layout** button to access the advanced Canvas-based layout editor for precise positioning and resizing.
+3.  **Preview Your Form:** The **Form Preview** panel will update in real-time, showing you exactly what your form looks like.
+4.  **Share or Export:** Once you're happy with your form, you can start collecting responses. The data you collect will appear in the **JSON Output** panel. You can also generate code for your form.
 
 ## Examples of What You Can Create
 
@@ -38,8 +42,12 @@ This project was built with the following technologies:
 *   **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
 *   **Material-UI:** A React UI framework that implements Google's Material Design.
 *   **Vite:** A build tool that provides a fast development experience for modern web projects.
-*   **React Hook Form:** A library for managing forms in React.
-*   **i18next:** An internationalization-framework written in and for JavaScript.
+*   **Zod:** A TypeScript-first schema declaration and validation library.
+*   **@google/generative-ai:** The Google Generative AI SDK for TypeScript.
+*   **jodit-react:** A React wrapper for the Jodit editor.
+*   **Vitest:** A blazing fast unit-test framework powered by Vite.
+*   **react-resizable-panels:** A library for creating resizable panels in React.
+*   **konva & react-konva:** Libraries for 2D canvas rendering in React.
 
 ### Getting Started
 
@@ -51,18 +59,26 @@ To get started with the project, you need to have Node.js and npm installed on y
 git clone https://github.com/your-username/dynamic-form-generator.git
 ```
 
-2.  Install the dependencies:
+2.  Create a `.env` file in the root of the project and add your Gemini API key as `VITE_GEMINI_API_KEY`.
+
+3.  Install the dependencies:
 
 ```bash
 npm install
 ```
 
-3.  Start the development server:
+4.  Start the development server:
 
 ```bash
 npm run dev
 ```
 
 This will start the development server on `http://localhost:5173`.
+
+5.  Run the tests:
+
+```bash
+npm test
+```
 
 </details>

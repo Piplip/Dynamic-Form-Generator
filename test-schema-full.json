@@ -1,0 +1,141 @@
+{
+  "title": "All Features Test Form",
+  "layout": {
+    "type": "grid",
+    "columns": 12,
+    "rows": 10,
+    "spacing": 16,
+    "labelPlacement": "top",
+    "variant": "outlined"
+  },
+  "theme": {
+    "font": {
+      "size": 16,
+      "family": "Roboto"
+    },
+    "color": {
+      "primary": "#673ab7",
+      "secondary": "#f50057"
+    }
+  },
+  "fields": [
+    {
+      "name": "fullName",
+      "label": "Full Name",
+      "type": "text",
+      "placeholder": "Enter your full name",
+      "validation": {
+        "required": true,
+        "minLength": 3
+      },
+      "layout": {
+        "row": 0,
+        "col": 0,
+        "rowSpan": 1,
+        "colSpan": 6
+      }
+    },
+    {
+      "name": "email",
+      "label": "Email Address",
+      "type": "email",
+      "placeholder": "Enter your email",
+      "validation": {
+        "required": true,
+        "pattern": "^\\S+@\\S+\\.\\S+$"
+      },
+      "layout": {
+        "row": 0,
+        "col": 6,
+        "rowSpan": 1,
+        "colSpan": 6
+      }
+    },
+    {
+      "name": "age",
+      "label": "Age",
+      "type": "number",
+      "validation": {
+        "min": 18,
+        "max": 99
+      },
+      "layout": {
+        "row": 1,
+        "col": 0,
+        "rowSpan": 1,
+        "colSpan": 3
+      }
+    },
+    {
+      "name": "gender",
+      "label": "Gender",
+      "type": "select",
+      "options": [
+        {
+          "label": "Male",
+          "value": "male"
+        },
+        {
+          "label": "Female",
+          "value": "female"
+        },
+        {
+          "label": "Other",
+          "value": "other"
+        }
+      ],
+      "layout": {
+        "row": 1,
+        "col": 3,
+        "rowSpan": 1,
+        "colSpan": 3
+      }
+    },
+    {
+      "name": "profilePicture",
+      "label": "Profile Picture",
+      "type": "file",
+      "layout": {
+        "row": 1,
+        "col": 6,
+        "rowSpan": 1,
+        "colSpan": 6
+      }
+    },
+    {
+      "name": "bio",
+      "label": "Biography",
+      "type": "rich-text",
+      "layout": {
+        "row": 2,
+        "col": 0,
+        "rowSpan": 2,
+        "colSpan": 12
+      }
+    },
+    {
+      "name": "subscribe",
+      "label": "Subscribe to our newsletter",
+      "type": "checkbox",
+      "defaultValue": true,
+      "layout": {
+        "row": 4,
+        "col": 0,
+        "rowSpan": 1,
+        "colSpan": 6
+      }
+    },
+    {
+      "name": "submitButton",
+      "label": "Submit",
+      "type": "button",
+      "buttonType": "submit",
+      "layout": {
+        "row": 5,
+        "col": 5,
+        "rowSpan": 1,
+        "colSpan": 2
+      }
+    }
+  ]
+}

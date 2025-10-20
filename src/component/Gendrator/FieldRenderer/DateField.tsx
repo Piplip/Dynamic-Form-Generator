@@ -11,10 +11,10 @@ interface FieldRendererProps {
     theme?: FormTheme;
 }
 
-function SelectField({field, value, onChange, error, style, labelPlacement, theme}: FieldRendererProps) {
+function DateField({field, value, onChange, error, style, labelPlacement, theme}: FieldRendererProps) {
     const label = field.label || field.name;
 
-    const selectStyle: CSSProperties = {
+    const dateStyle: CSSProperties = {
         ...style,
         backgroundColor: theme?.color?.background,
         color: theme?.color?.text,
@@ -33,21 +33,16 @@ function SelectField({field, value, onChange, error, style, labelPlacement, them
     return (
         <div>
             <label>{label}</label>
-            <select
+            <input
+                type="date"
                 name={field.name}
                 value={value ?? field.defaultValue ?? ''}
                 onChange={(e) => onChange(e.target.value)}
-                style={selectStyle}
-            >
-                {field.options?.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
-                    </option>
-                ))}
-            </select>
+                style={dateStyle}
+            />
             {error && <span>{error}</span>}
         </div>
     );
 }
 
-export default SelectField;
+export default DateField;
