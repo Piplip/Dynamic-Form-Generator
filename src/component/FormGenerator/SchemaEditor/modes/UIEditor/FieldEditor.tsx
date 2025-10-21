@@ -15,7 +15,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useState} from "react";
 import ConditionEditor from "./ConditionEditor";
-import {FieldSchema, FormSchema} from "../../../../../interfaces";
+import {FieldSchema, FormSchema, InputFieldLayout, FileFieldLayout} from "../../../../../interfaces"; // Added InputFieldLayout, FileFieldLayout
 import {toCamelCase} from "../../../../../utils/string.ts";
 import ListIcon from '@mui/icons-material/List';
 import OptionsEditorModal from "./OptionsEditorModal";
@@ -40,6 +40,15 @@ function FieldEditor({field, index, onFieldChange, onRemoveField, availableField
 
     const handleOptionsChange = (options?: FieldSchema['options']) => {
         onFieldChange(index, {...field, options});
+    };
+
+    // New handlers for type-specific layouts
+    const handleInputLayoutChange = (newLayout: InputFieldLayout) => {
+        onFieldChange(index, {...field, inputLayout: newLayout});
+    };
+
+    const handleFileLayoutChange = (newLayout: FileFieldLayout) => {
+        onFieldChange(index, {...field, fileLayout: newLayout});
     };
 
     return (
@@ -127,17 +136,17 @@ function FieldEditor({field, index, onFieldChange, onRemoveField, availableField
             {field.type === 'file' && (
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                        <Typography>File Upload</Typography>
+                        <Typography>File Upload Layout</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
                             <TextField
                                 select
                                 label="Preset"
-                                value={field.layout?.preset || 'button'}
-                                onChange={(e) => handleLayoutChange({
-                                    ...field.layout,
-                                    preset: e.target.value as FieldSchema['layout']['preset']
+                                value={field.fileLayout?.preset || 'button'}
+                                onChange={(e) => handleFileLayoutChange({
+                                    ...field.fileLayout,
+                                    preset: e.target.value as FileFieldLayout['preset']
                                 })}
                             >
                                 <MenuItem value="button">Button</MenuItem>
@@ -145,9 +154,9 @@ function FieldEditor({field, index, onFieldChange, onRemoveField, availableField
                             </TextField>
                             <TextField
                                 label="Button Text"
-                                value={field.layout?.buttonText}
-                                onChange={(e) => handleLayoutChange({
-                                    ...field.layout,
+                                value={field.fileLayout?.buttonText}
+                                onChange={(e) => handleFileLayoutChange({
+                                    ...field.fileLayout,
                                     buttonText: e.target.value
                                 })}
                             />
@@ -155,37 +164,39 @@ function FieldEditor({field, index, onFieldChange, onRemoveField, availableField
                     </AccordionDetails>
                 </Accordion>
             )}
-            {field.type === 'checkbox' && (
+            {(field.type === 'text' || field.type === 'email' || field.type === 'number' || field.type === 'select' || field.type === 'textarea') && (
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                        <Typography>Checkbox</Typography>
+                        <Typography>Input Layout</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
                             <TextField
-                                label="Checked Icon"
-                                value={field.style?.checkedIcon}
-                                onChange={(e) => handleStyleChange({
-                                    ...field.style,
-                                    checkedIcon: e.target.value
+                                select
+                                label="Label Placement"
+                                value={field.inputLayout?.labelPlacement || 'top'}
+                                onChange={(e) => handleInputLayoutChange({
+                                    ...field.inputLayout,
+                                    labelPlacement: e.target.value as InputFieldLayout['labelPlacement']
                                 })}
-                            />
+                            >
+                                <MenuItem value="top">Top</MenuItem>
+                                <MenuItem value="left">Left</MenuItem>
+                                <MenuItem value="inline">Inline</MenuItem>
+                            </TextField>
                             <TextField
-                                label="Unchecked Icon"
-                                value={field.style?.uncheckedIcon}
-                                onChange={(e) => handleStyleChange({
-                                    ...field.style,
-                                    uncheckedIcon: e.target.value
+                                select
+                                label="Variant"
+                                value={field.inputLayout?.variant || 'outlined'}
+                                onChange={(e) => handleInputLayoutChange({
+                                    ...field.inputLayout,
+                                    variant: e.target.value as InputFieldLayout['variant']
                                 })}
-                            />
-                            <TextField
-                                label="Indeterminate Icon"
-                                value={field.style?.indeterminateIcon}
-                                onChange={(e) => handleStyleChange({
-                                    ...field.style,
-                                    indeterminateIcon: e.target.value
-                                })}
-                            />
+                            >
+                                <MenuItem value="outlined">Outlined</MenuItem>
+                                <MenuItem value="filled">Filled</MenuItem>
+                                <MenuItem value="standard">Standard</MenuItem>
+                            </TextField>
                         </Box>
                     </AccordionDetails>
                 </Accordion>

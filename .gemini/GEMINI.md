@@ -54,3 +54,12 @@ To set up the project locally, follow these steps:
 *   The project uses the `camelCase` convention for variable and function names.
 *   The project uses the `PascalCase` convention for component names.
 *   The project uses the `.tsx` extension for files that contain JSX.
+
+## 6. Recent Changes
+
+*   **UIEditor Refactoring:** The `UIEditor` has been refactored to fully reflect all control properties for each input field. This includes:
+    *   Adding controls for `labelPlacement` and `variant` properties for input fields.
+    *   Introducing a new "Layout" accordion that is displayed for all field types except "button", containing dropdowns to select `labelPlacement` and `variant` properties.
+    *   The `FieldSchema` interface in `src/interfaces/index.ts` was updated to use type-specific layout properties (`inputLayout` and `fileLayout`) instead of a generic `layout` property.
+    *   The `FieldEditor.tsx` component was updated to conditionally render layout controls based on the field type.
+    *   The `FormRenderer.tsx` component was updated to correctly pass type-specific layout properties to the `GenericFieldRenderer`.

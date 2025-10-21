@@ -1,5 +1,24 @@
 import {CSSProperties} from "react";
 
+export interface BaseFieldLayout {
+    row?: number;
+    col?: number;
+    rowSpan?: number;
+    colSpan?: number;
+    width?: number | string;
+    height?: number | string;
+}
+
+export interface InputFieldLayout extends BaseFieldLayout {
+    labelPlacement?: 'top' | 'left' | 'inline';
+    variant?: 'outlined' | 'filled' | 'standard';
+}
+
+export interface FileFieldLayout extends BaseFieldLayout {
+    preset?: 'button' | 'dropzone';
+    buttonText?: string;
+}
+
 export interface FieldSchema {
     name: string;
     label?: string;
@@ -21,18 +40,12 @@ export interface FieldSchema {
         indeterminateIcon?: string;
         color?: string;
     };
-    layout?: {
-        row?: number;
-        col?: number;
-        rowSpan?: number;
-        colSpan?: number;
-        width?: number | string;
-        height?: number | string;
-        labelPlacement?: 'top' | 'left' | 'inline';
-        variant?: 'outlined' | 'filled' | 'standard';
-        preset?: 'button' | 'dropzone';
-        buttonText?: string;
-    };
+    // Removed generic 'layout' property
+
+    // Type-specific layout properties
+    inputLayout?: InputFieldLayout; // For text, email, number, select, textarea
+    fileLayout?: FileFieldLayout;   // For file
+
     condition?: {
         field: string;
         operator: '==' | '!=' | '>' | '<' | '>=' | '<=' | 'includes' | '!includes';
