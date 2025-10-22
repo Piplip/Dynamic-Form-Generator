@@ -1,45 +1,52 @@
-import {FieldSchema, FormTheme} from "../../../interfaces";
-import {CSSProperties} from "react";
-import {TextField} from "@mui/material";
+import {FieldSchema} from "../../../interfaces";
+import {useInputStyles} from "../../../hooks/useInputStyles.ts";
 
 interface FieldRendererProps {
     field: FieldSchema;
     value: any;
     onChange: (value: any) => void;
     error?: string;
-    style?: CSSProperties;
-    variant?: 'outlined' | 'filled' | 'standard';
-    labelPlacement?: 'top' | 'left' | 'inline';
-    theme?: FormTheme;
 }
 
-function TextareaField({field, value, onChange, error, style, variant, labelPlacement, theme}: FieldRendererProps) {
-    const label = field.label || field.name;
-    const isInline = labelPlacement === 'inline';
+function TextareaField({field, value, onChange, error}: FieldRendererProps) {
+    const {
+        containerStyle,
+        labelStyle,
+        finalInputStyle,
+        helperTextStyle,
+        errorTextStyle,
+        label,
+        name,
+        disabled,
+        readOnly,
+        labelPlacement,
+        placeholder,
+        defaultValue,
+        helperText
+    } = useInputStyles(field, error);
 
-    const textareaStyle: CSSProperties = {
-        ...style,
-        backgroundColor: theme?.color?.background,
-        color: theme?.color?.text,
-    };
+    const {rows, cols} = field.textareaLayout || {};
 
     return (
-        <TextField
-            style={textareaStyle}
-            multiline
-            rows={4}
-            name={field.name}
-            label={isInline ? '' : label}
-            value={value ?? field.defaultValue ?? ''}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={field.placeholder}
-            error={!!error}
-            helperText={error}
-            variant={variant}
-            InputProps={{
-                startAdornment: isInline ? <span style={{paddingRight: '10px'}}>{label}</span> : null,
-            }}
-        />
+        <div style={containerStyle}>
+            {label && labelPlacement !== 'inside' && labelPlacement !== 'hidden' && (
+                <label htmlFor={name} style={labelStyle}>{label}</label>
+            )}
+            <textarea
+                id={name}
+                name={name}
+                value={value ?? defaultValue ?? ''}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={labelPlacement === 'inside' ? label : placeholder}
+                style={finalInputStyle}
+                disabled={disabled}
+                readOnly={readOnly}
+                rows={rows || 4} // Default to 4 rows if not specified
+                cols={cols}
+            />
+            {error && <span style={errorTextStyle}>{error}</span>}
+            {!error && helperText && <span style={helperTextStyle}>{helperText}</span>}
+        </div>
     );
 }
 

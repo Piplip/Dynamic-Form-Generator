@@ -13,14 +13,14 @@ Ever wanted to create a form but didn't want to mess with complicated code? The 
 *   **Instant Previews:** See your form come to life as you build it. The live preview panel shows you exactly what your form will look like.
 *   **Custom Field Types:** Beyond standard text and numbers, create forms with rich text editors, file uploads, and custom buttons.
 *   **Conditional Logic:** Implement dynamic forms where fields appear or disappear based on user input.
-*   **Easy Data Export & Code Generation:** Easily export collected data to JSON or generate production-ready code for various web frameworks (e.g., React).
+*   **Robust Code Generation:** Generate production-ready, responsive, and accessible code for various web frameworks (e.g., React, Vue) and UI libraries (e.g., Tailwind CSS, Material-UI) based on your schema. The generated code includes form state management and validation.
 
 ## How to Use
 
 1.  **Describe Your Form (AI Editor):** Start by typing a description of the form you want to create in the **AI Editor** tab. For example, "a customer feedback form with a rating scale from 1 to 5."
 2.  **Visually Design (UI Editor):** Switch to the **UI Editor** tab to add, remove, or configure fields. Use the **Edit Layout** button to access the advanced Canvas-based layout editor for precise positioning and resizing.
 3.  **Preview Your Form:** The **Form Preview** panel will update in real-time, showing you exactly what your form looks like.
-4.  **Share or Export:** Once you're happy with your form, you can start collecting responses. The data you collect will appear in the **JSON Output** panel. You can also generate code for your form.
+4.  **Generate Code:** In the **Generated Code** panel, select your desired framework and UI library. Click the **Generate Code** button, then **View Generated Code** to see the output in a modal with separate files and copy options.
 
 ## Examples of What You Can Create
 
@@ -48,6 +48,7 @@ This project was built with the following technologies:
 *   **Vitest:** A blazing fast unit-test framework powered by Vite.
 *   **react-resizable-panels:** A library for creating resizable panels in React.
 *   **konva & react-konva:** Libraries for 2D canvas rendering in React.
+*   **Code Generation Module:** A new module (`src/code-generator`) responsible for programmatically generating production-ready form code based on user-defined schemas and selected tech stacks.
 
 ### Getting Started
 

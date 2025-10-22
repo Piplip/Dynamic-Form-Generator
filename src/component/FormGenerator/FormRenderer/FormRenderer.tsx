@@ -1,6 +1,8 @@
 import {FormSchema, FieldSchema} from "../../../interfaces";
 import {validateFormData} from "../../../utils/validation";
 import GenericFieldRenderer from "../FieldRenderer";
+import {useMediaQuery, Breakpoint} from "../../../hooks/useMediaQuery";
+import {useRef} from "react";
 
 interface FormRendererProps {
     schema: FormSchema;
@@ -11,6 +13,22 @@ interface FormRendererProps {
 }
 
 function FormRenderer({schema, formData, onFormChange, onValidate, formErrors}: FormRendererProps) {
+    const formRef = useRef<HTMLFormElement>(null);
+    const currentBreakpoint = useMediaQuery(formRef);
+
+    const getResponsiveColSpan = (field: FieldSchema, breakpoint: Breakpoint): number => {
+        const layout = field.layout;
+        if (!layout) return 1; // Default colSpan
+
+        switch (breakpoint) {
+            case 'xl': return layout.colSpanXl ?? layout.colSpanLg ?? layout.colSpanMd ?? layout.colSpanSm ?? layout.colSpanXs ?? layout.colSpan ?? 1;
+            case 'lg': return layout.colSpanLg ?? layout.colSpanMd ?? layout.colSpanSm ?? layout.colSpanXs ?? layout.colSpan ?? 1;
+            case 'md': return layout.colSpanMd ?? layout.colSpanSm ?? layout.colSpanXs ?? layout.colSpan ?? 1;
+            case 'sm': return layout.colSpanSm ?? layout.colSpanXs ?? layout.colSpan ?? 1;
+            case 'xs': return layout.colSpanXs ?? layout.colSpan ?? 1;
+            default: return layout.colSpan ?? 1;
+        }
+    };
 
     const checkCondition = (field: FieldSchema): boolean => {
         if (!field.condition) {
@@ -78,6 +96,8 @@ function FormRenderer({schema, formData, onFormChange, onValidate, formErrors}: 
                 return null;
             }
 
+            const fieldColSpan = getResponsiveColSpan(field, currentBreakpoint);
+
             const fieldElement = (
                 <GenericFieldRenderer
                     key={field.name}
@@ -85,17 +105,17 @@ function FormRenderer({schema, formData, onFormChange, onValidate, formErrors}: 
                     value={formData[field.name]}
                     onChange={handleChange}
                     error={formErrors[field.name]}
-                    layout={field.layout || schema.layout}
                     theme={schema.theme}
                 />
             );
 
             if (useGridLayout) {
+                const startCol = (fieldColSpan === gridDimensions.columns) ? 1 : (field.layout?.col || 0) + 1;
                 return (
                     <div
                         key={field.name}
                         style={{
-                            gridColumn: `${(field.layout?.col || 0) + 1} / span ${field.layout?.colSpan || 1}`,
+                            gridColumn: `${startCol} / span ${fieldColSpan}`,
                             gridRow: `${(field.layout?.row || 0) + 1} / span ${field.layout?.rowSpan || 1}`,
                             display: 'flex',
                             flexDirection: 'column',
@@ -112,29 +132,25 @@ function FormRenderer({schema, formData, onFormChange, onValidate, formErrors}: 
 
     // Calculate grid dimensions based on field layouts
     const getGridDimensions = () => {
-        if (schema.layout?.columns && schema.layout?.rows) {
-            return {
-                columns: schema.layout.columns,
-                rows: schema.layout.rows
-            };
+        const baseColumns = schema.layout?.columns || 12;
+        let responsiveColumns = baseColumns;
+
+        switch (currentBreakpoint) {
+            case 'xl': responsiveColumns = schema.layout?.columnsXl ?? schema.layout?.columnsLg ?? schema.layout?.columnsMd ?? schema.layout?.columnsSm ?? schema.layout?.columnsXs ?? baseColumns;
+                break;
+            case 'lg': responsiveColumns = schema.layout?.columnsLg ?? schema.layout?.columnsMd ?? schema.layout?.columnsSm ?? schema.layout?.columnsXs ?? baseColumns;
+                break;
+            case 'md': responsiveColumns = schema.layout?.columnsMd ?? schema.layout?.columnsSm ?? schema.layout?.columnsXs ?? baseColumns;
+                break;
+            case 'sm': responsiveColumns = schema.layout?.columnsSm ?? schema.layout?.columnsXs ?? baseColumns;
+                break;
+            case 'xs': responsiveColumns = schema.layout?.columnsXs ?? baseColumns;
+                break;
         }
 
-        // Calculate from field positions
-        let maxCol = 0;
-        let maxRow = 0;
-
-        schema.fields.forEach(field => {
-            if (field.layout) {
-                const endCol = (field.layout.col || 0) + (field.layout.colSpan || 1);
-                const endRow = (field.layout.row || 0) + (field.layout.rowSpan || 1);
-                maxCol = Math.max(maxCol, endCol);
-                maxRow = Math.max(maxRow, endRow);
-            }
-        });
-
         return {
-            columns: Math.max(maxCol, schema.layout?.columns || 12),
-            rows: Math.max(maxRow, schema.layout?.rows || 10)
+            columns: responsiveColumns,
+            rows: schema.layout?.rows || 10 // Rows are not responsive in this implementation
         };
     };
 
@@ -154,7 +170,7 @@ function FormRenderer({schema, formData, onFormChange, onValidate, formErrors}: 
     };
 
     return (
-        <form onSubmit={handleSubmit} style={formStyle}>
+        <form onSubmit={handleSubmit} style={formStyle} ref={formRef}>
             {schema.title && <h1>{schema.title}</h1>}
             {useGridLayout ? (
                 <div style={{

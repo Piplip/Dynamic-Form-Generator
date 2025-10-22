@@ -1,51 +1,64 @@
-import {FieldSchema, FormTheme} from "../../../interfaces";
-import {CSSProperties} from "react";
+import {FieldSchema} from "../../../interfaces";
+import {useInputStyles} from "../../../hooks/useInputStyles.ts";
 
 interface FieldRendererProps {
     field: FieldSchema;
     value: any;
     onChange: (value: any) => void;
     error?: string;
-    style?: CSSProperties;
-    labelPlacement?: 'top' | 'left' | 'inline';
-    theme?: FormTheme;
 }
 
-function SelectField({field, value, onChange, error, style, labelPlacement, theme}: FieldRendererProps) {
-    const label = field.label || field.name;
+function SelectField({field, value, onChange, error}: FieldRendererProps) {
+    const {
+        containerStyle,
+        labelStyle,
+        finalInputStyle,
+        helperTextStyle,
+        errorTextStyle,
+        label,
+        name,
+        disabled,
+        readOnly,
+        labelPlacement,
+        placeholder,
+        defaultValue,
+        helperText
+    } = useInputStyles(field, error);
 
-    const selectStyle: CSSProperties = {
-        ...style,
-        backgroundColor: theme?.color?.background,
-        color: theme?.color?.text,
-        fontSize: theme?.font?.size,
-        fontFamily: theme?.font?.family,
-        fontWeight: theme?.font?.weight,
-        fontStyle: theme?.font?.style,
-        lineHeight: theme?.layout?.lineHeight,
-        padding: theme?.layout?.padding,
-        margin: theme?.layout?.margin,
-        borderColor: theme?.border?.color,
-        borderWidth: theme?.border?.width,
-        borderStyle: theme?.border?.style,
+    const {multiple} = field.selectLayout || {};
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (multiple) {
+            const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+            onChange(selectedOptions);
+        } else {
+            onChange(e.target.value);
+        }
     };
 
     return (
-        <div>
-            <label>{label}</label>
+        <div style={containerStyle}>
+            {label && labelPlacement !== 'inside' && labelPlacement !== 'hidden' && (
+                <label htmlFor={name} style={labelStyle}>{label}</label>
+            )}
             <select
-                name={field.name}
-                value={value ?? field.defaultValue ?? ''}
-                onChange={(e) => onChange(e.target.value)}
-                style={selectStyle}
+                id={name}
+                name={name}
+                value={value ?? defaultValue ?? (multiple ? [] : '')}
+                onChange={handleChange}
+                style={finalInputStyle}
+                disabled={disabled}
+                multiple={multiple}
             >
+                {placeholder && !multiple && <option value="">{placeholder}</option>}
                 {field.options?.map((option) => (
                     <option key={option.value} value={option.value}>
                         {option.label}
                     </option>
                 ))}
             </select>
-            {error && <span>{error}</span>}
+            {error && <span style={errorTextStyle}>{error}</span>}
+            {!error && helperText && <span style={helperTextStyle}>{helperText}</span>}
         </div>
     );
 }

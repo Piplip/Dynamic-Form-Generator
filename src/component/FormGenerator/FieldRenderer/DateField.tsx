@@ -1,39 +1,55 @@
 import {FieldSchema} from "../../../interfaces";
-import {CSSProperties} from "react";
-import {TextField} from "@mui/material";
+import {useInputStyles} from "../../../hooks/useInputStyles.ts";
 
 interface FieldRendererProps {
     field: FieldSchema;
     value: any;
     onChange: (value: any) => void;
     error?: string;
-    style?: CSSProperties;
-    variant?: 'outlined' | 'filled' | 'standard';
-    labelPlacement?: 'top' | 'left' | 'inline';
 }
 
-function DateField({field, value, onChange, error, style, variant, labelPlacement}: FieldRendererProps) {
-    const label = field.label || field.name;
-    const isInline = labelPlacement === 'inline';
+function DateField({field, value, onChange, error}: FieldRendererProps) {
+    const {
+        containerStyle,
+        labelStyle,
+        finalInputStyle,
+        helperTextStyle,
+        errorTextStyle,
+        label,
+        name,
+        disabled,
+        readOnly,
+        labelPlacement,
+        placeholder,
+        defaultValue,
+        helperText
+    } = useInputStyles(field, error);
+
+    const {variant, minDate, maxDate} = field.datePickerLayout || {};
+
+    const inputType = variant === 'datetime' ? 'datetime-local' : 'date';
 
     return (
-        <TextField
-            style={style}
-            type="date"
-            name={field.name}
-            label={isInline ? '' : label}
-            value={value ?? field.defaultValue ?? ''}
-            onChange={(e) => onChange(e.target.value)}
-            error={!!error}
-            helperText={error}
-            variant={variant}
-            InputLabelProps={{
-                shrink: true,
-            }}
-            InputProps={{
-                startAdornment: isInline ? <span style={{paddingRight: '10px'}}>{label}</span> : null,
-            }}
-        />
+        <div style={containerStyle}>
+            {label && labelPlacement !== 'inside' && labelPlacement !== 'hidden' && (
+                <label htmlFor={name} style={labelStyle}>{label}</label>
+            )}
+            <input
+                id={name}
+                type={inputType}
+                name={name}
+                value={value ?? defaultValue ?? ''}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={labelPlacement === 'inside' ? label : placeholder}
+                style={finalInputStyle}
+                disabled={disabled}
+                readOnly={readOnly}
+                min={minDate}
+                max={maxDate}
+            />
+            {error && <span style={errorTextStyle}>{error}</span>}
+            {!error && helperText && <span style={helperTextStyle}>{helperText}</span>}
+        </div>
     );
 }
 

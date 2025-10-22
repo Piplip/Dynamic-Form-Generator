@@ -85,21 +85,24 @@ function LayoutEditorModal({open, onClose, schema, onSchemaChange}: LayoutEditor
 
     useEffect(() => {
         if (open) {
-            const needsInit = schema.fields.some(field => !field.layout);
-            if (needsInit) {
-                const newFields = schema.fields.map((field, index) => ({
+            const newFields = schema.fields.map((field, index) => {
+                const currentLayout = field.layout || {};
+                return {
                     ...field,
-                    layout: field.layout || {
-                        row: index,
-                        col: 0,
-                        rowSpan: 1,
-                        colSpan: 1,
+                    layout: {
+                        row: currentLayout.row ?? index, // Default to index if row is missing
+                        col: currentLayout.col ?? 0,
+                        rowSpan: currentLayout.rowSpan ?? 1,
+                        colSpan: currentLayout.colSpan ?? 1,
                     }
-                }));
+                };
+            });
+            // Only update if there were actual changes to prevent infinite loops
+            if (JSON.stringify(newFields) !== JSON.stringify(schema.fields)) {
                 onSchemaChange({...schema, fields: newFields});
             }
         }
-    }, [open]);
+    }, [open, schema, onSchemaChange]);
 
     const handleGridChange = (columns: number, rows: number) => {
         setGridColumns(columns);
