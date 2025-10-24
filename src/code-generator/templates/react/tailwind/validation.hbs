@@ -1,0 +1,16 @@
+import { z } from 'zod';
+
+export const {{formName}}Schema = z.object({
+  {{#each fields}}
+    {{#unless isButton}}
+    {{name}}: z.{{#if isNumber}}number(){{#else if isCheckbox}}boolean(){{#else if isFile}}any(){{#else}}string(){{/if}}
+    ({{#if required}}).min(1, "{{validationMessages.required}}"){{/if}}
+    {{#if minLength}}).min({{minLength}}, "{{validationMessages.minLength}}"){{/if}}
+    {{#if maxLength}}).max({{maxLength}}, "{{validationMessages.maxLength}}"){{/if}}
+    {{#if pattern}}).regex(new RegExp("{{pattern}}"), "{{validationMessages.pattern}}"){{/if}}
+    {{#if min}}).min({{min}}, "{{validationMessages.min}}"){{/if}}
+    {{#if max}}).max({{max}}, "{{validationMessages.max}}"){{/if}}
+    ,
+    {{/unless}}
+  {{/each}}
+});

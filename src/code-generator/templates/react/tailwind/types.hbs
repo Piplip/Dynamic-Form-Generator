@@ -1,0 +1,7 @@
+export interface {{formName}}FormData {
+  {{#each fields}}
+    {{#unless isButton}}
+    {{name}}: {{#if isNumber}}number{{else if isCheckbox}}boolean{{else if isFile}}FileList | null{{else}}string{{/if}};
+    {{/unless}}
+  {{/each}}
+}
