@@ -9,9 +9,6 @@ interface AIEditorProps {
 
 function AIEditor({onGenerateSchema}: AIEditorProps) {
     const [text, setText] = useState('');
-    const [requiredFields, setRequiredFields] = useState(false);
-    const [defaultValues, setDefaultValues] = useState(false);
-    const [validationRules, setValidationRules] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -39,11 +36,6 @@ function AIEditor({onGenerateSchema}: AIEditorProps) {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
-            <FormGroup>
-                <FormControlLabel control={<Checkbox checked={requiredFields} onChange={(e) => setRequiredFields(e.target.checked)}/>} label="Required fields"/>
-                <FormControlLabel control={<Checkbox checked={defaultValues} onChange={(e) => setDefaultValues(e.target.checked)}/>} label="Default values"/>
-                <FormControlLabel control={<Checkbox checked={validationRules} onChange={(e) => setValidationRules(e.target.checked)}/>} label="Validation rules"/>
-            </FormGroup>
             <Button onClick={handleGenerate} disabled={loading}>
                 {loading ? <CircularProgress size={24} /> : "Generate"}
             </Button>

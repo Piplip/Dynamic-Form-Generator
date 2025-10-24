@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { FieldSchema } from '../interfaces';
+import {z} from 'zod';
+import {FieldSchema} from '../interfaces';
 
 export const createZodSchema = (fields: FieldSchema[]) => {
   const schema: Record<string, any> = {};
@@ -89,11 +89,13 @@ export const validateFormData = (fields: FieldSchema[], data: Record<string, any
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors: Record<string, string> = {};
-      error.errors.forEach(err => {
-        if (err.path.length > 0) {
-          errors[err.path[0]] = err.message;
+        if (error.errors) { // Add this check
+            error.errors.forEach(err => {
+                if (err.path.length > 0) {
+                    errors[err.path[0]] = err.message;
+                }
+            });
         }
-      });
       return errors;
     }
     return { _general: 'An unknown validation error occurred' };

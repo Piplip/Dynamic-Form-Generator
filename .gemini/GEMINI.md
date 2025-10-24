@@ -22,6 +22,7 @@ The application is built using the following technologies:
 *   **Vitest:** A blazing fast unit-test framework powered by Vite.
 *   **react-resizable-panels:** A library for creating resizable panels in React.
 *   **konva & react-konva:** Libraries for 2D canvas rendering in React.
+*   **AI-Driven Code Generation:** The core code generation logic is now entirely AI-driven, leveraging the Gemini API to generate production-ready form code based on user-defined schemas and selected tech stacks. It no longer uses a template engine.
 
 ## 3. Key Files and Directories
 
@@ -35,8 +36,9 @@ The application is built using the following technologies:
 *   `src/component/FormGenerator/SchemaEditor/modes/UIEditor/LayoutEditorModal.tsx`: This component provides a Canvas-based layout editor for precise visual representation and interactive field manipulation.
 *   `src/component/FormGenerator/FormRenderer/FormRenderer.tsx`: This component renders the form based on the JSON schema.
 *   `src/component/FormGenerator/OutputPanel/OutputPanel.tsx`: This component displays the form data and any validation errors. It also has an "Export" button that allows users to download the generated form as an HTML file, or as code for different web frameworks.
-*   `src/utils/ai.ts`: This file contains the logic for interacting with the Gemini API to generate the JSON schema from natural language.
-*   `src/utils/codeGenerator.ts`: This file contains the logic for generating code for different web frameworks.
+*   `src/utils/ai.ts`: This file contains the logic for interacting with the Gemini API for AI-powered schema generation, AI-driven code generation, and AI-suggested generation options.
+*   `src/utils/codeGenerator.ts`: This file now acts as a dispatcher for AI-driven code generation.
+*   `src/utils/codeValidator.ts`: This file contains the logic for validating the AI-generated code.
 *   `src/utils/validation.ts`: This file contains the logic for validating the form data using Zod.
 
 ## 4. Local Setup
@@ -57,9 +59,14 @@ To set up the project locally, follow these steps:
 
 ## 6. Recent Changes
 
-*   **UIEditor Refactoring:** The `UIEditor` has been refactored to fully reflect all control properties for each input field. This includes:
-    *   Adding controls for `labelPlacement` and `variant` properties for input fields.
-    *   Introducing a new "Layout" accordion that is displayed for all field types except "button", containing dropdowns to select `labelPlacement` and `variant` properties.
-    *   The `FieldSchema` interface in `src/interfaces/index.ts` was updated to use type-specific layout properties (`inputLayout` and `fileLayout`) instead of a generic `layout` property.
-    *   The `FieldEditor.tsx` component was updated to conditionally render layout controls based on the field type.
-    *   The `FormRenderer.tsx` component was updated to correctly pass type-specific layout properties to the `GenericFieldRenderer`.
+*   **AI-Driven Code Generation:** The code generation module (`src/code-generator`) has been refactored to rely entirely on AI (Gemini API) for generating form code. This includes enhanced prompt engineering, a retry mechanism with validation feedback, and few-shot examples to improve accuracy. The previous template engine has been removed.
+*   **UI/UX Improvements:**
+    *   The `ThemeEditor` component was extracted for better modularity.
+    *   The AI Editor UI was streamlined by removing unnecessary checkboxes.
+    *   A consistent alert system (`useAlert`) was integrated for error display.
+    *   A loading indicator was added for code generation.
+    *   More `GenerationOptions` (language, state management, validation) were exposed in the UI.
+    *   Dynamic filtering and default setting for generation options based on framework selection were implemented.
+    *   Granular control for form title styling and spacing was added to the theme.
+*   **Code Validation:** A `codeValidator.ts` utility was introduced to perform basic structural and import checks on AI-generated code, providing feedback for the retry mechanism.
+*   **Bug Fixes:** Addressed `TypeError` in `validation.ts` and corrected regex patterns in `codeValidator.ts`.

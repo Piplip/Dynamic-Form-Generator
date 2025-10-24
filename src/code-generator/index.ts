@@ -1,5 +1,3 @@
-// Main orchestrator for code generation
-
 import { FormSchema } from "../../interfaces";
 import { validateSchema } from "./schemaValidator";
 import { GeneratedFile } from "./types";
@@ -17,7 +15,7 @@ export async function generateCode(rawSchema: any, options: GenerationOptions): 
   // 1. Validate the input schema
   const validatedSchema = validateSchema(rawSchema);
 
-  // 2. Delegate to framework-specific generator
+  // 2. Delegate to framework-specific generator (now always AI-driven)
   let generatedFiles: GeneratedFile[] = [];
 
   switch (options.framework) {
@@ -25,8 +23,8 @@ export async function generateCode(rawSchema: any, options: GenerationOptions): 
       generatedFiles = await ReactGenerator.generate(validatedSchema, options);
       break;
     case "vue":
-      // generatedFiles = await VueGenerator.generate(validatedSchema, options);
-      break;
+      // For Vue, we would also call generateCodeWithAI or a Vue-specific AI generator
+      throw new Error("Vue generation not yet implemented with AI.");
     // Add other frameworks here
     default:
       throw new Error(`Unsupported framework: ${options.framework}`);

@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import {
-  Modal, Box, Typography, Tabs, Tab, AppBar, Toolbar, IconButton, Snackbar, Alert
-} from '@mui/material';
+import React, {useState} from 'react';
+import {Alert, AppBar, Box, Button, IconButton, Modal, Snackbar, Tab, Tabs, Toolbar, Typography} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
-import { GeneratedFile } from "../../../code-generator/types";
+import {GeneratedFile} from "../../../code-generator/types";
 
 interface GeneratedCodeModalProps {
   open: boolean;

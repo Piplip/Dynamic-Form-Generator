@@ -6,9 +6,10 @@ interface FieldRendererProps {
     value: any;
     onChange: (value: any) => void;
     error?: string;
+    theme?: FormTheme;
 }
 
-function InputField({field, value, onChange, error}: FieldRendererProps) {
+function InputField({field, value, onChange, error, theme}: FieldRendererProps) {
     const {
         containerStyle,
         labelStyle,
@@ -23,7 +24,7 @@ function InputField({field, value, onChange, error}: FieldRendererProps) {
         placeholder,
         defaultValue,
         helperText
-    } = useInputStyles(field, error);
+    } = useInputStyles(field, error, theme);
 
     return (
         <div style={containerStyle}>

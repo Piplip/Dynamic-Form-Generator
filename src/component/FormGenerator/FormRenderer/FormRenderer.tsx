@@ -171,19 +171,28 @@ function FormRenderer({schema, formData, onFormChange, onValidate, formErrors}: 
 
     return (
         <form onSubmit={handleSubmit} style={formStyle} ref={formRef}>
-            {schema.title && <h1>{schema.title}</h1>}
+            {schema.title && <h1 style={{
+                fontSize: schema.theme?.title?.fontSize,
+                fontWeight: schema.theme?.title?.fontWeight,
+                color: schema.theme?.title?.color,
+                textAlign: schema.theme?.title?.textAlign,
+                marginTop: schema.theme?.title?.marginTop,
+                marginBottom: schema.theme?.title?.marginBottom,
+                paddingTop: schema.theme?.title?.paddingTop,
+                paddingBottom: schema.theme?.title?.paddingBottom,
+            }}>{schema.title}</h1>}
             {useGridLayout ? (
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: `repeat(${gridDimensions.columns}, 1fr)`,
                     gridTemplateRows: `repeat(${gridDimensions.rows}, auto)`,
-                    gap: `${schema.layout?.spacing || 8}px`,
+                    gap: `${schema.theme?.layout?.gap || 8}px`, // Use theme gap or a default small gap
                     width: '100%'
                 }}>
                     {renderFields()}
                 </div>
             ) : (
-                <div style={{display: 'flex', flexDirection: 'column', gap: `${schema.layout?.spacing || 8}px`}}>
+                <div style={{display: 'flex', flexDirection: 'column', gap: `${schema.theme?.layout?.gap || 8}px`}}>
                     {renderFields()}
                 </div>
             )}

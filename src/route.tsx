@@ -1,8 +1,9 @@
 import {createBrowserRouter} from "react-router";
-import RootLayout from "./template/RootLayout.jsx";
-import Home from "./pages/Home/Home.jsx";
-import About from "./pages/About/About.jsx";
-import NotFound from "./component/Common/NotFound.jsx";
+import RootLayout from "./template/RootLayout.tsx";
+import Home from "./pages/Home/Home.tsx";
+import About from "./pages/About/About.tsx";
+import NotFound from "./component/Common/NotFound.tsx";
+import LoginForm from "./Test.jsx"
 
 const router = createBrowserRouter([
     {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
     {
         path: 'about',
         element: <About />
+    },
+    {
+        path: 'test',
+        element: <LoginForm />
     },
     {
         path: '*',

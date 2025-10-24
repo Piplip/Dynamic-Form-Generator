@@ -1,334 +1,50 @@
 {
-  "meta": {
-    "version": "1.0",
-    "description": "Comprehensive test schema demonstrating new layout and variant features."
-  },
-  "title": "Dynamic Form with Advanced Features",
-  "layout": {
-    "type": "grid",
-    "columns": 12,
-    "rows": 10,
-    "columnsXs": 1,
-    "columnsSm": 6,
-    "columnsMd": 12
-  },
+  "title": "Login Form",
   "fields": [
     {
-      "name": "fullName",
-      "label": "Full Name",
-      "type": "text",
-      "layout": {
-        "row": 0,
-        "col": 0,
-        "colSpan": 6,
-        "colSpanXs": 12,
-        "colSpanSm": 12
-      },
-      "inputLayout": {
-        "labelPlacement": "top",
-        "variant": "outlined",
-        "size": "medium",
-        "fullWidth": true,
-        "helperText": "Please enter your full name."
-      },
-      "validation": {
-        "required": true,
-        "minLength": 3,
-        "requiredError": "Full name is mandatory.",
-        "minLengthError": "Full name must be at least 3 characters."
-      }
-    },
-    {
-      "name": "emailAddress",
-      "label": "Email Address",
+      "name": "email",
+      "label": "Email",
       "type": "email",
-      "layout": {
-        "row": 0,
-        "col": 6,
-        "colSpan": 6,
-        "colSpanXs": 12,
-        "colSpanSm": 12
+      "validation": {
+        "required": true,
+        "requiredError": "Email is required",
+        "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+        "patternError": "Invalid email address"
       },
       "inputLayout": {
-        "labelPlacement": "left",
-        "variant": "filled",
-        "size": "small",
-        "fullWidth": false,
-        "helperText": "We'll never share your email."
-      },
-      "validation": {
-        "required": true,
-        "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
-        "requiredError": "Email is required.",
-        "patternError": "Please enter a valid email address."
+        "fullWidth": true,
+        "variant": "outlined"
       }
     },
     {
-      "name": "age",
-      "label": "Age",
-      "type": "number",
-      "layout": {
-        "row": 1,
-        "col": 0,
-        "colSpan": 3,
-        "colSpanXs": 12,
-        "colSpanSm": 6
+      "name": "password",
+      "label": "Password",
+      "type": "text",
+      "validation": {
+        "required": true,
+        "requiredError": "Password is required",
+        "minLength": 6,
+        "minLengthError": "Password must be at least 6 characters"
       },
       "inputLayout": {
-        "labelPlacement": "top",
-        "variant": "standard",
-        "size": "large"
-      },
-      "validation": {
-        "min": 18,
-        "max": 99,
-        "minError": "You must be at least 18 years old.",
-        "maxError": "You cannot be older than 99."
+        "fullWidth": true,
+        "variant": "outlined"
       }
     },
     {
-      "name": "country",
-      "label": "Country",
-      "type": "select",
-      "layout": {
-        "row": 1,
-        "col": 3,
-        "colSpan": 5,
-        "colSpanXs": 12,
-        "colSpanSm": 6
-      },
-      "options": [
-        { "label": "USA", "value": "usa" },
-        { "label": "Canada", "value": "can" },
-        { "label": "Mexico", "value": "mex" }
-      ],
-      "selectLayout": {
-        "labelPlacement": "top",
-        "variant": "outlined",
-        "size": "medium",
-        "fullWidth": true
-      },
-      "validation": {
-        "required": true,
-        "requiredError": "Please select your country."
-      }
-    },
-    {
-      "name": "interests",
-      "label": "Interests",
-      "type": "select",
-      "layout": {
-        "row": 1,
-        "col": 8,
-        "colSpan": 4
-      },
-      "options": [
-        { "label": "Sports", "value": "sports" },
-        { "label": "Music", "value": "music" },
-        { "label": "Reading", "value": "reading" },
-        { "label": "Coding", "value": "coding" }
-      ],
-      "selectLayout": {
-        "labelPlacement": "left",
-        "variant": "filled",
-        "size": "small",
-        "multiple": true
-      }
-    },
-    {
-      "name": "subscribeNewsletter",
-      "label": "Subscribe to Newsletter",
-      "type": "checkbox",
-      "layout": {
-        "row": 2,
-        "col": 0,
-        "colSpan": 6
-      },
-      "checkboxLayout": {
-        "labelPlacement": "right",
-        "size": "medium"
-      }
-    },
-    {
-      "name": "termsAccepted",
-      "label": "I accept the terms and conditions",
-      "type": "checkbox",
-      "layout": {
-        "row": 2,
-        "col": 6,
-        "colSpan": 6
-      },
-      "checkboxLayout": {
-        "labelPlacement": "left",
-        "size": "small"
-      },
-      "validation": {
-        "required": true,
-        "requiredError": "You must accept the terms."
-      }
-    },
-    {
-      "name": "profilePicture",
-      "label": "Profile Picture",
-      "type": "file",
-      "layout": {
-        "row": 3,
-        "col": 0,
-        "colSpan": 6
-      },
-      "fileLayout": {
-        "preset": "drag-and-drop",
-        "accept": "image/*",
-        "maxSize": 5242880,
-        "maxFiles": 1,
-        "showFileList": true
-      },
-      "validation": {
-        "required": true,
-        "requiredError": "Please upload a profile picture."
-      }
-    },
-    {
-      "name": "documentUpload",
-      "label": "Upload Document",
-      "type": "file",
-      "layout": {
-        "row": 3,
-        "col": 6,
-        "colSpan": 6
-      },
-      "fileLayout": {
-        "preset": "button-only",
-        "accept": ".pdf,.doc,.docx",
-        "multiple": true,
-        "maxFiles": 3
-      }
-    },
-    {
-      "name": "eventDate",
-      "label": "Event Date",
-      "type": "date",
-      "layout": {
-        "row": 4,
-        "col": 0,
-        "colSpan": 6
-      },
-      "datePickerLayout": {
-        "variant": "date",
-        "minDate": "2023-01-01",
-        "maxDate": "2024-12-31"
-      },
-      "validation": {
-        "required": true,
-        "requiredError": "Event date is required."
-      }
-    },
-    {
-      "name": "meetingTime",
-      "label": "Meeting Time",
-      "type": "date",
-      "layout": {
-        "row": 4,
-        "col": 6,
-        "colSpan": 6
-      },
-      "datePickerLayout": {
-        "variant": "datetime"
-      }
-    },
-    {
-      "name": "description",
-      "label": "Description",
-      "type": "rich-text",
-      "layout": {
-        "row": 5,
-        "col": 0,
-        "colSpan": 12,
-        "rowSpan": 2
-      },
-      "richTextLayout": {
-        "editorLibrary": "jodit",
-        "toolbarConfig": "full",
-        "height": "300px"
-      },
-      "validation": {
-        "required": true,
-        "minLength": 10,
-        "requiredError": "Description cannot be empty.",
-        "minLengthError": "Description must be at least 10 characters."
-      }
-    },
-    {
-      "name": "notes",
-      "label": "Notes",
-      "type": "textarea",
-      "layout": {
-        "row": 7,
-        "col": 0,
-        "colSpan": 12,
-        "rowSpan": 2
-      },
-      "textareaLayout": {
-        "rows": 6,
-        "cols": 50,
-        "labelPlacement": "top",
-        "variant": "outlined",
-        "size": "medium",
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "submitButton",
-      "label": "Submit Form",
+      "name": "submit",
+      "label": "Login",
       "type": "button",
       "buttonType": "submit",
-      "layout": {
-        "row": 9,
-        "col": 0,
-        "colSpan": 4,
-        "colSpanXs": 12,
-        "colSpanSm": 6
-      },
       "buttonLayout": {
-        "variant": "primary",
-        "size": "large",
-        "fullWidth": true
+        "fullWidth": true,
+        "variant": "primary"
       }
-    },
-    {
-      "name": "resetButton",
-      "label": "Reset",
-      "type": "button",
-      "buttonType": "button",
-      "layout": {
-        "row": 9,
-        "col": 4,
-        "colSpan": 4,
-        "colSpanXs": 12,
-        "colSpanSm": 6
-      },
-      "buttonLayout": {
-        "variant": "secondary",
-        "size": "medium"
-      }
-    },
-    {
-      "name": "deleteButton",
-      "label": "Delete Account",
-      "type": "button",
-      "buttonType": "button",
-      "layout": {
-        "row": 9,
-        "col": 8,
-        "colSpan": 4,
-        "colSpanXs": 12,
-        "colSpanSm": 12
-      },
-      "buttonLayout": {
-        "variant": "danger",
-        "size": "small"
-      },
-      "disabled": true
     }
-  ]
+  ],
+  "layout": {
+    "type": "grid",
+    "columns": 1,
+    "spacing": 2
+  }
 }

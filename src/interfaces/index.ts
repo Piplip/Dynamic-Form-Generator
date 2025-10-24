@@ -164,6 +164,7 @@ export interface FormTheme {
         padding?: string; // e.g., '8px 12px'
         margin?: string; // e.g., '0 0 16px 0'
         borderRadius?: string; // e.g., '4px'
+        gap?: number; // Gap between fields in pixels
     };
     border?: {
         color?: string;
@@ -188,6 +189,16 @@ export interface FormTheme {
             background?: string;
             text?: string;
         };
+    };
+    title?: {
+        fontSize?: string;
+        fontWeight?: string;
+        color?: string;
+        textAlign?: 'left' | 'center' | 'right';
+        marginTop?: string;
+        marginBottom?: string;
+        paddingTop?: string;
+        paddingBottom?: string;
     };
 }
 

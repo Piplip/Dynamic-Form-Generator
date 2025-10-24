@@ -2,10 +2,10 @@ import {createContext} from "react";
 
 export const AlertContext = createContext({
     alerts: [],
-    showAlert: () => {},
-    closeAlert: () => {},
-    showSuccess: () => {},
-    showError: () => {},
-    showWarning: () => {},
-    showInfo: () => {}
+    showAlert: (msg, type, dur) => {},
+    closeAlert: (msg, type, dur) => {},
+    showSuccess: (msg, type, dur) => {},
+    showError: (msg, type, dur) => {},
+    showWarning: (msg, type, dur) => {},
+    showInfo: (msg, type, dur) => {}
 })
