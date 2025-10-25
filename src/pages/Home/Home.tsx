@@ -204,7 +204,7 @@ function Home() {
             }
 
             setIsGeneratingCode(true);
-            setTriggerGeneration(false); // Reset trigger immediately
+            setTriggerGeneration(false);
 
             try {
                 const files = await generateCode(schema, generationOptions);

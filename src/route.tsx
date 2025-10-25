@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     },
     {
         path: 'test',
-        element: <LoginForm />
+        element: <LoginForm onSubmit={() => {}}/>
     },
     {
         path: '*',

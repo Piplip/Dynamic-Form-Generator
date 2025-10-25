@@ -114,7 +114,10 @@ export async function generateCodeWithAI(schema: FormSchema, options: Generation
 
     let errorFeedback = "";
     if (lastErrors.length > 0) {
-        errorFeedback = `\n\n**Previous Generation Errors:**\n\`\`\`\n${lastErrors.join("\n")}\n\`\`\`\n\n**Please review the errors and regenerate the code, focusing on fixing these specific issues.**`;
+        errorFeedback = `\n\n**Previous Generation Errors:**\n\
+${lastErrors.join("\n")}
+\
+**Please review the errors and regenerate the code, focusing on fixing these specific issues.**`;
     }
 
     const tsFewShotExample = `import React from 'react';
@@ -270,7 +273,7 @@ export default LoginForm;
   ${JSON.stringify(options, null, 2)}
 \`\`\`
 
-  **Example (Login Form with React, Tailwind CSS, React Hook Form, Zod):**
+  **Example (Login Form with selected Framework, UI Library, etc.):**
 \`\`\`${codeBlockType}
 ${fewShotExample}
 \`\`\`
@@ -282,7 +285,7 @@ ${fewShotExample}
     const response = result.response;
     const code = response.text();
 
-    // Extract code block if the model returns it wrapped in markdown
+    // Explicitly remove markdown code block delimiters if present
     const match = code.match(new RegExp(`\`\`\`(?:${codeBlockType})?\s?([\s\S]*?)\n\`\`\``));
     if (match && match[1]) {
         return match[1];
